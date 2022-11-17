@@ -5,8 +5,7 @@ import Login from "../components/Login";
 import { RealmContext } from "../context/realmProvider";
 
 function MasterLayout(props) {
-  const isLogin = true;
-  const { logout, user, mongo, isLoggedIn } = useContext(RealmContext);
+  const { logout, isLoggedIn } = useContext(RealmContext);
 
   if (isLoggedIn) {
     return (
