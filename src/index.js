@@ -20,7 +20,7 @@ root.render(
       <BrowserRouter>
         <Routes>
           <Route element={<MasterLayout />}>
-            <Route path='/' element={<App />}></Route>
+            <Route path='/' element={<Dashboard />}></Route>
             <Route path='/dashboard' element={<Dashboard />}></Route>
           </Route>
           <Route path='*' element={<NotFound />} />

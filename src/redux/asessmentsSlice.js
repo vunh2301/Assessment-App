@@ -14,25 +14,14 @@ const asessmentsSlice = createSlice({
   initialState: assessmentsAdapter.getInitialState({
     status: "idle",
     error: "",
+    user: {},
   }),
   extraReducers(builder) {
     builder
-      .addCase(fetchAssessments.pending, (state, action) => {
-        state.status = "loading";
-        state.error = "";
-      })
       .addCase(fetchAssessments.fulfilled, (state, action) => {
         const entries = action.payload;
         assessmentsAdapter.setAll(state, entries);
         state.status = "idle";
-        state.error = "";
-      })
-      .addCase(fetchAssessments.rejected, (state, action) => {
-        state.status = "error";
-        state.error = action.error;
-      })
-      .addCase(insertAssessment.pending, (state, action) => {
-        state.status = "loading";
         state.error = "";
       })
       .addCase(insertAssessment.fulfilled, (state, action) => {
@@ -40,10 +29,6 @@ const asessmentsSlice = createSlice({
         assessmentsAdapter.addOne(state, entity);
         state.status = "idle";
         state.error = "";
-      })
-      .addCase(insertAssessment.rejected, (state, action) => {
-        state.status = "error";
-        state.error = action.error;
       })
       .addCase(insertAssessments.fulfilled, (state, action) => {
         const entities = action.payload;
@@ -67,6 +52,12 @@ const asessmentsSlice = createSlice({
       .addCase(deleteAssessment.fulfilled, (state, action) => {
         const id = action.payload;
         assessmentsAdapter.removeOne(state, id);
+        state.status = "idle";
+        state.error = "";
+      })
+      .addCase(getUser.fulfilled, (state, action) => {
+        const user = action.payload;
+        state.user = user;
         state.status = "idle";
         state.error = "";
       });
@@ -187,11 +178,28 @@ export const deleteAssessment = createAsyncThunk(
     }
   }
 );
+
+//FETCH ALL
+export const getUser = createAsyncThunk(
+  "assessments/getUser",
+  async (payload, { rejectWithValue }) => {
+    const { mongo, user } = payload;
+    try {
+      const result = await mongo.db("a247").collection("user").findOne({
+        userID: user.id,
+      });
+      return objectIdToString(result);
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
 const assessmentsSelectors = assessmentsAdapter.getSelectors(
   state => state.assessments
 );
 
 export const selectAssessments = state => assessmentsSelectors.selectAll(state);
+export const selectUser = state => state.assessments.user;
 export const selectTopNewAssessments = state =>
   selectAssessments(state).filter((_, i) => i < 5);
 export default asessmentsSlice;

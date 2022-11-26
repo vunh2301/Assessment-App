@@ -21,6 +21,20 @@ function Assessments(props) {
   const handleDelete = id => {
     dispatch(deleteAssessment({ mongo, id }));
   };
+  const statusColor = status => {
+    switch (status) {
+      case "Created":
+        return "#999";
+      case "Sented":
+        return "#2db7f5";
+      case "Opened":
+      case "Doing":
+        return "#108ee9";
+      case "Completed":
+        return "#87d068";
+    }
+    return "#2db7f5";
+  };
   return (
     <Card>
       <Table
@@ -111,7 +125,7 @@ function Assessments(props) {
             dataIndex: "status",
             render: (_, entity) => (
               <>
-                <Tag color='#108ee9'>{entity.status}</Tag>{" "}
+                <Tag color={statusColor(entity.status)}>{entity.status}</Tag>{" "}
                 {entity.status !== "Completed" ? (
                   <Button
                     size='small'
