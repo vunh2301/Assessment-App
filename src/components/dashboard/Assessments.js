@@ -1,4 +1,4 @@
-import { Avatar, Button, Card, Table, Tag, Tooltip } from "antd";
+import { Avatar, Button, Card, Progress, Table, Tag, Tooltip } from "antd";
 import {
   CloudDownloadOutlined,
   LinkOutlined,
@@ -24,12 +24,10 @@ function Assessments(props) {
   return (
     <Card>
       <Table
-        bordered
-        size='small'
         rowKey='_id'
         columns={[
           {
-            title: "Assessment",
+            title: "Assessments",
             dataIndex: "type",
             render: (_, entity) => {
               var avatar = null;
@@ -66,35 +64,45 @@ function Assessments(props) {
                     <Avatar src={avatar} />
                   </Tooltip>{" "}
                   {entity.type} - {entity.language}{" "}
-                  <Tooltip title='Assessment Link'>
-                    <a href={`https://a247.vn/${entity.short}`}>
+                  <Tooltip title='Liên kết bài đánh giá'>
+                    <a
+                      href={`https://link.a247.vn/${entity.short}`}
+                      target='_blank'>
                       <LinkOutlined />
                     </a>
                   </Tooltip>{" "}
                   <br />{" "}
-                  <small>
+                  {/* <small>
                     <strong>Email: </strong>
                     {entity.email}
-                  </small>
+                  </small> */}
                 </>
               );
             },
           },
-          //{ title: "Email", dataIndex: "email" },
-          // {
-          //   title: "Ngày tạo",
-          //   dataIndex: "created",
-          //   render: created => moment(created).format("ll"),
-          // },
+          { title: "Email", dataIndex: "email" },
           {
-            title: "Báo cáo",
+            title: "Ngày tạo",
+            dataIndex: "created",
+            render: created => moment(created).format("DD/MM/YYYY"),
+          },
+          {
+            title: "Kết quả",
             dataIndex: "report",
             render: (_, entity) => (
               <>
-                {entity.title}{" "}
-                <a href={`https://a247.vn/${entity.short}`}>
+                <Progress
+                  type='circle'
+                  percent={entity.percent ? entity.percent : 0}
+                  width={50}
+                  style={{
+                    marginRight: 8,
+                  }}
+                />
+                {/* {entity.firstname} {entity.lastname}{" "}
+                <a href={`https://a247.vn/${entity.short}`} target='_blank'>
                   <CloudDownloadOutlined />
-                </a>
+                </a> */}
               </>
             ),
           },
@@ -104,7 +112,7 @@ function Assessments(props) {
             render: (_, entity) => (
               <>
                 <Tag color='#108ee9'>{entity.status}</Tag>{" "}
-                {entity.status === "Created" ? (
+                {entity.status !== "Completed" ? (
                   <Button
                     size='small'
                     type='primary'
@@ -118,7 +126,7 @@ function Assessments(props) {
                   ""
                 )}
                 <br />
-                <small>{moment(entity.created).format("ll")}</small>
+                <small>{moment(entity.updated).format("ll")}</small>
               </>
             ),
           },

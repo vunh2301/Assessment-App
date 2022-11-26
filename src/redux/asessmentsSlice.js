@@ -54,10 +54,13 @@ const asessmentsSlice = createSlice({
         state.error = "";
       })
       .addCase(updateAssessments.fulfilled, (state, action) => {
-        const { ids, entities } = action.payload;
-
-        console.log(entities);
-        assessmentsAdapter.updateMany(state, { updates: entities });
+        const { ids, update } = action.payload;
+        for (const index in ids) {
+          assessmentsAdapter.updateOne(state, {
+            id: ids[index],
+            changes: update,
+          });
+        }
         state.status = "idle";
         state.error = "";
       })
@@ -78,7 +81,7 @@ export const fetchAssessments = createAsyncThunk(
     try {
       const result = await mongo
         .db("a247")
-        .collection("assessment")
+        .collection("assessments")
         .aggregate([
           {
             $sort: {
@@ -87,7 +90,7 @@ export const fetchAssessments = createAsyncThunk(
           },
           {
             $match: {
-              owner: ObjectId(user.id),
+              owner: user.id,
             },
           },
         ]);
@@ -106,8 +109,8 @@ export const insertAssessment = createAsyncThunk(
     try {
       const { insertedId } = await mongo
         .db("a247")
-        .collection("assessment")
-        .insertOne({ ...entity, owner: ObjectId(user.id) });
+        .collection("assessments")
+        .insertOne({ ...entity, owner: user.id });
       return objectIdToString({
         ...entity,
         _id: insertedId,
@@ -125,7 +128,7 @@ export const insertAssessments = createAsyncThunk(
     try {
       const { insertedIds } = await mongo
         .db("a247")
-        .collection("assessment")
+        .collection("assessments")
         .insertMany(entities);
       return entities.map((entity, index) => {
         return {
@@ -142,11 +145,11 @@ export const insertAssessments = createAsyncThunk(
 export const updateAssessments = createAsyncThunk(
   "assessments/updateAssessments",
   async (payload, { rejectWithValue }) => {
-    const { ids, mongo, entities } = payload;
+    const { ids, mongo, update } = payload;
     try {
       await mongo
         .db("a247")
-        .collection("assessment")
+        .collection("assessments")
         .updateMany(
           {
             _id: {
@@ -154,12 +157,12 @@ export const updateAssessments = createAsyncThunk(
             },
           },
           {
-            $set: entities,
+            $set: update,
           }
         );
       return {
         ids: objectIdToString(ids),
-        entities,
+        update,
       };
     } catch (error) {
       console.log(error);
@@ -176,7 +179,7 @@ export const deleteAssessment = createAsyncThunk(
     try {
       await mongo
         .db("a247")
-        .collection("assessment")
+        .collection("assessments")
         .deleteOne({ _id: ObjectId(id) });
       return id;
     } catch (error) {

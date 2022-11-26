@@ -9,6 +9,9 @@ import { RealmProvider } from "./context/realmProvider";
 import { Provider } from "react-redux";
 import { store } from "./redux/store";
 import Dashboard from "./pages/Dashboard";
+import "./index.css";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -22,6 +25,7 @@ root.render(
           </Route>
           <Route path='*' element={<NotFound />} />
         </Routes>
+        <ToastContainer />
       </BrowserRouter>
     </Provider>
   </RealmProvider>

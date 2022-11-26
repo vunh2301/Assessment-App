@@ -20,3 +20,40 @@ export const removeEmptyObject = obj =>
     var func = _.overSome([_.isNil, _.isNaN]);
     return !func(value);
   });
+export const inviteFormat = ({ firstname, lastname, types }) => {
+  var links = "";
+  if (!firstname || !lastname || !types || types.length <= 0) {
+    return "";
+  }
+  types.forEach(type => {
+    links += `
+      <li>
+        <b>${type.type}: </b>
+        <a href="https://link.a247.vn/${type.short}" target="_blank">
+          https://link.a247.vn/${type.short}
+        </a>
+      </li>
+      `;
+  });
+  return `
+    <p>
+      <b>
+        ${firstname} ${lastname}
+      </b>
+      thân mến:
+    </p>
+    <p>
+      <b>Assessments 24x7</b> cảm ơn bạn đã đăng ký tham gia đánh giá
+      của chúng tôi.
+    </p>
+    <p>
+      <b>
+        Bắt đầu làm bài đánh giá hoặc xem lại kết quả bài đánh giá vui
+        lòng click vào liên kết bên dưới.
+      </b>
+    </p>
+    <ul>
+      ${links}
+    </ul>
+  `;
+};

@@ -6,29 +6,55 @@ import {
   selectAssessments,
   selectTopNewAssessments,
 } from "../../redux/asessmentsSlice";
+import { formatCountdown } from "antd/es/statistic/utils";
 
 function TopNewAssessments(props) {
+  const fullname = "Justin Nguyễn";
+  const short = "sjahn";
+  const email = "vunh2301@gmail.com";
   const asessments = useSelector(selectTopNewAssessments);
   useEffect(() => {}, [asessments]);
   return (
-    <Card>
-      <h3>Credits: 9,999 / 10,000</h3>
-      {/* <Table
-        bordered
-        size='small'
-        rowKey='_id'
-        columns={[
-          { title: "Title", dataIndex: "email" },
-          {
-            title: "Date",
-            dataIndex: "created",
-            render: created => moment(created).format("ll"),
-          },
-          { title: "Status", dataIndex: "status" },
-        ]}
-        dataSource={asessments}
-      /> */}
-    </Card>
+    <>
+      <h3>Nội dung email</h3>
+      {/* <h4>
+        From: Online Assessment Platform {"<"}reports@a247.vn{">"}
+      </h4>
+      <h4>
+        To: {fullname} {"<"}
+        {email}
+        {">"}
+      </h4> */}
+      <Card>
+        <p>
+          <b>{fullname}</b> thân mến:
+        </p>
+        <p>
+          <b>Assessments 24x7</b> cảm ơn bạn đã đăng ký tham gia đánh giá của
+          chúng tôi.
+        </p>
+        <p>
+          <b>
+            Bắt đầu làm bài đánh giá hoặc xem lại kết quả bài đánh giá vui lòng
+            click vào liên kết bên dưới.
+          </b>
+        </p>
+        <ul>
+          <li>
+            <b>DISC: </b>
+            <a href={`https://link.a247.vn/${short}`}>
+              https://link.a247.vn/{short}
+            </a>
+          </li>
+          <li>
+            <b>Motivators: </b>
+            <a href={`https://link.a247.vn/${short}`}>
+              https://link.a247.vn/{short}
+            </a>
+          </li>
+        </ul>
+      </Card>
+    </>
   );
 }
 

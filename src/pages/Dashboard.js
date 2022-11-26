@@ -7,14 +7,9 @@ import TopNewAssessments from "../components/dashboard/TopNewAssessments";
 function Dashboard(props) {
   return (
     <>
-      <Row gutter={20}>
-        <Col span={12}>
-          <QuickAddAssessment />
-        </Col>
-        <Col span={12}>
-          <TopNewAssessments />
-        </Col>
-      </Row>
+      <Card>
+        <QuickAddAssessment />
+      </Card>
       <Row style={{ marginTop: "20px" }}>
         <Col span={24}>
           <Assessments />
