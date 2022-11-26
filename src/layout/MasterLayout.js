@@ -48,11 +48,11 @@ function MasterLayout(props) {
               alt=''
             />
           </div>
-          <Space style={{ float: "right", padding: "12px" }}>
+          <Space style={{ float: "right", padding: "12px 20px 12px" }}>
             <div
               style={{
                 display: "inline-block",
-                marginRight: "20px",
+                marginRight: "10px",
                 textAlign: "right",
               }}>
               <h3 style={{ margin: 0 }}>{currentUser.fullname}</h3>

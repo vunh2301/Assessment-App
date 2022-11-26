@@ -41,7 +41,7 @@ function Assessments(props) {
         rowKey='_id'
         columns={[
           {
-            title: "Assessments",
+            title: "Bài đánh giá",
             dataIndex: "type",
             render: (_, entity) => {
               var avatar = null;
