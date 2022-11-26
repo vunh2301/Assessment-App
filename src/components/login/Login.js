@@ -73,11 +73,15 @@ function Login(props) {
               name="email"
               placeholder="Enter your email"
               control={control}
+              disabled={isSubmitting}
             ></Input>
           </Field>
           <Field>
             <Label htmlFor="password">Password</Label>
-            <InputPasswordToggle control={control}></InputPasswordToggle>
+            <InputPasswordToggle
+              control={control}
+              disabled={isSubmitting}
+            ></InputPasswordToggle>
           </Field>
           <Button
             type="submit"
