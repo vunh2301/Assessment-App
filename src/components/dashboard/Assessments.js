@@ -2,6 +2,7 @@ import {
   Avatar,
   Button,
   Card,
+  Popconfirm,
   Progress,
   Space,
   Table,
@@ -170,11 +171,11 @@ function Assessments(props) {
                 ) : (
                   <Progress
                     type="circle"
-                    percent={
+                    percent={Math.floor(
                       entity.report && entity.report.current
                         ? entity.report.current
                         : 0
-                    }
+                    )}
                     width={50}
                     style={{
                       marginRight: 8,
@@ -199,15 +200,17 @@ function Assessments(props) {
               <>
                 <Tag color={statusColor(entity.status)}>{entity.status}</Tag>
                 {entity.status === "Created" || entity.status === "Sented" ? (
-                  <Button
-                    size="small"
-                    type="primary"
-                    danger
-                    onClick={() => {
-                      handleDelete(entity._id);
-                    }}
-                    icon={<DeleteOutlined />}
-                  />
+                  <Popconfirm
+                    title="Bạn muốn xoá?"
+                    onConfirm={() => handleDelete(entity._id)}
+                  >
+                    <Button
+                      size="small"
+                      type="primary"
+                      danger
+                      icon={<DeleteOutlined />}
+                    />
+                  </Popconfirm>
                 ) : (
                   ""
                 )}
