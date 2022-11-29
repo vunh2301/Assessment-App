@@ -6,8 +6,8 @@ export const {
 } = Realm;
 export const _ = deepdash(lodash);
 
-export const objectIdToString = obj => {
-  return _.mapValuesDeep(obj, v => {
+export const objectIdToString = (obj) => {
+  return _.mapValuesDeep(obj, (v) => {
     if (v?._bsontype === "ObjectID") {
       v = v.toString();
     }
@@ -15,7 +15,7 @@ export const objectIdToString = obj => {
   });
 };
 
-export const removeEmptyObject = obj =>
+export const removeEmptyObject = (obj) =>
   _.filterDeep(obj, (value, key, parent) => {
     var func = _.overSome([_.isNil, _.isNaN]);
     return !func(value);
@@ -25,7 +25,7 @@ export const inviteFormat = ({ firstname, lastname, types }) => {
   if (!firstname || !lastname || !types || types.length <= 0) {
     return "";
   }
-  types.forEach(type => {
+  types.forEach((type) => {
     links += `
       <li>
         <b>${type.type}: </b>
@@ -43,12 +43,12 @@ export const inviteFormat = ({ firstname, lastname, types }) => {
       thân mến:
     </p>
     <p>
-      <b>Assessments 24x7</b> cảm ơn bạn đã đăng ký tham gia đánh giá
+      <b>Assessments 24x7</b> cảm ơn Anh/Chị đã đăng ký tham gia đánh giá
       của chúng tôi.
     </p>
     <p>
       <b>
-        Bắt đầu làm bài đánh giá hoặc xem lại kết quả bài đánh giá vui
+        Bắt đầu làm bài đánh giá hoặc xem lại kết quả bài đánh giá Anh/Chị vui
         lòng click vào liên kết bên dưới.
       </b>
     </p>

@@ -1,4 +1,13 @@
-import { Avatar, Button, Card, Progress, Table, Tag, Tooltip } from "antd";
+import {
+  Avatar,
+  Button,
+  Card,
+  Progress,
+  Space,
+  Table,
+  Tag,
+  Tooltip,
+} from "antd";
 import {
   CloudDownloadOutlined,
   LinkOutlined,
@@ -18,10 +27,10 @@ function Assessments(props) {
   const { mongo } = useContext(RealmContext);
   const asessments = useSelector(selectAssessments);
   const dispatch = useDispatch();
-  const handleDelete = id => {
+  const handleDelete = (id) => {
     dispatch(deleteAssessment({ mongo, id }));
   };
-  const statusColor = status => {
+  const statusColor = (status) => {
     switch (status) {
       case "Created":
         return "#999";
@@ -38,7 +47,8 @@ function Assessments(props) {
   return (
     <Card>
       <Table
-        rowKey='_id'
+        id="body-view"
+        rowKey="_id"
         columns={[
           {
             title: "Bài đánh giá",
@@ -73,46 +83,104 @@ function Assessments(props) {
                 }
               }
               return (
-                <>
+                <Space>
                   <Tooltip title={entity.type}>
-                    <Avatar src={avatar} />
-                  </Tooltip>{" "}
-                  {entity.type} - {entity.language}{" "}
-                  <Tooltip title='Liên kết bài đánh giá'>
-                    <a
-                      href={`https://link.a247.vn/${entity.short}`}
-                      target='_blank'>
-                      <LinkOutlined />
-                    </a>
-                  </Tooltip>{" "}
-                  <br />{" "}
-                  {/* <small>
-                    <strong>Email: </strong>
-                    {entity.email}
-                  </small> */}
-                </>
+                    <Avatar size={52} src={avatar} />
+                  </Tooltip>
+                  <div>
+                    <h4 style={{ margin: 0 }}>
+                      {entity.firstname} {entity.lastname}
+                    </h4>
+                    <span style={{ margin: 0 }}>
+                      <Tooltip title="Đi tới bài đánh giá">
+                        <a
+                          href={`https://link.a247.vn/${entity.short}`}
+                          target="_blank"
+                        >
+                          {entity.type} <LinkOutlined />
+                        </a>
+                      </Tooltip>
+                    </span>
+                  </div>
+                </Space>
               );
             },
           },
-          { title: "Email", dataIndex: "email" },
+          {
+            title: "Email",
+            sorter: (a, b) => a.email > b.email,
+            dataIndex: "email",
+            render: (email) => (
+              <span style={{ fontSize: "13px", color: "#5f6368" }}>
+                {email}
+              </span>
+            ),
+          },
           {
             title: "Ngày tạo",
             dataIndex: "created",
-            render: created => moment(created).format("DD/MM/YYYY"),
+            sorter: (a, b) => a.created - b.created,
+            align: "center",
+            width: "180px",
+            render: (created) => {
+              return (
+                <h4 style={{ fontSize: "13px", color: "#5f6368", margin: 0 }}>
+                  {moment().diff(moment(created), "hours") >= 24
+                    ? moment(created).format("ll")
+                    : moment(created).fromNow()}
+                </h4>
+              );
+            },
+          },
+          {
+            title: "Hết hạn",
+            dataIndex: "expired",
+            align: "center",
+            width: "120px",
+            render: (_, { created, status }) => {
+              if (status === "Completed") {
+                return (
+                  <span style={{ fontSize: "13px", color: "#5f6368" }}>
+                    Hoàn thành
+                  </span>
+                );
+              } else {
+                return (
+                  <h4 style={{ fontSize: "13px", color: "#1677ff", margin: 0 }}>
+                    Còn {moment(created).add(30, "d").diff(moment(), "days")}{" "}
+                    ngày
+                  </h4>
+                );
+              }
+            },
           },
           {
             title: "Kết quả",
             dataIndex: "report",
+            align: "center",
+            width: "125px",
             render: (_, entity) => (
               <>
-                <Progress
-                  type='circle'
-                  percent={entity.percent ? entity.percent : 0}
-                  width={50}
-                  style={{
-                    marginRight: 8,
-                  }}
-                />
+                {entity.report && entity.report.download ? (
+                  <h4>
+                    <a href={entity.report.download} target="_blank">
+                      Tải báo cáo <CloudDownloadOutlined />
+                    </a>
+                  </h4>
+                ) : (
+                  <Progress
+                    type="circle"
+                    percent={
+                      entity.report && entity.report.current
+                        ? entity.report.current
+                        : 0
+                    }
+                    width={50}
+                    style={{
+                      marginRight: 8,
+                    }}
+                  />
+                )}
                 {/* {entity.firstname} {entity.lastname}{" "}
                 <a href={`https://a247.vn/${entity.short}`} target='_blank'>
                   <CloudDownloadOutlined />
@@ -122,14 +190,18 @@ function Assessments(props) {
           },
           {
             title: "Trạng thái",
+            align: "center",
+            width: "130px",
+
+            sorter: (a, b) => a.status > b.status,
             dataIndex: "status",
             render: (_, entity) => (
               <>
-                <Tag color={statusColor(entity.status)}>{entity.status}</Tag>{" "}
-                {entity.status !== "Completed" ? (
+                <Tag color={statusColor(entity.status)}>{entity.status}</Tag>
+                {entity.status === "Created" || entity.status === "Sented" ? (
                   <Button
-                    size='small'
-                    type='primary'
+                    size="small"
+                    type="primary"
                     danger
                     onClick={() => {
                       handleDelete(entity._id);
@@ -140,7 +212,11 @@ function Assessments(props) {
                   ""
                 )}
                 <br />
-                <small>{moment(entity.updated).format("ll")}</small>
+                <span style={{ fontSize: "12px", color: "#5f6368" }}>
+                  {moment().diff(moment(entity.updated), "hours") >= 24
+                    ? moment(entity.updated).format("ll")
+                    : moment(entity.updated).fromNow()}
+                </span>
               </>
             ),
           },
