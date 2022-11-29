@@ -104,6 +104,7 @@ function QuickAddAssessment(props) {
       to: values.email,
       cc: values.emailCC,
       subject: "Bài đánh giá Assessment 2x47",
+      "o:tag": "app.a247.vn",
       html: assessmentState,
     });
     await dispatch(

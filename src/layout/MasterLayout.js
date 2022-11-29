@@ -13,7 +13,7 @@ import {
 import { Header } from "antd/es/layout/layout";
 import React, { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Outlet } from "react-router-dom";
+import { Outlet, useSearchParams } from "react-router-dom";
 import { LogoutOutlined, UserOutlined } from "@ant-design/icons";
 import Login from "../components/login/Login";
 import { RealmContext } from "../context/realmProvider";
@@ -22,12 +22,14 @@ import {
   getUser,
   selectUser,
 } from "../redux/asessmentsSlice";
+import { result } from "lodash";
 
 function MasterLayout(props) {
-  const { logout, isLoggedIn, mongo, user } = useContext(RealmContext);
+  const { logout, isLoggedIn, mongo, user, app } = useContext(RealmContext);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
   const currentUser = useSelector(selectUser);
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -164,3 +166,19 @@ function MasterLayout(props) {
 }
 
 export default MasterLayout;
+
+// console.log("resetpass");
+// const email = "ceo@wowmultimedia.vn";
+// const password = "hongbeoi";
+// const token = searchParams.get("token");
+// const tokenId = searchParams.get("tokenId");
+// //await app.emailPasswordAuth.sendResetPasswordEmail({ email });
+// //http://localhost:3000/passwordReset?token=618fb81e0b796e24a9396724f5afffaf908615ac8e9f0118a68c1fe349f50b8315488d5b9d1ca4dc46ca6dd655580f9579545cf160b8aa800197671c768c042f&tokenId=6385d6ecc79c035dca86b136
+
+// if (!!token && !!tokenId && !!password) {
+//   await app.emailPasswordAuth.resetPassword({
+//     password,
+//     token,
+//     tokenId,
+//   });
+// }
