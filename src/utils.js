@@ -37,9 +37,7 @@ export const inviteFormat = ({ firstname, lastname, types }) => {
   });
   return `
     <p>
-      <b>
-        ${firstname} ${lastname}
-      </b>
+      <b>${firstname} ${lastname}</b>
       thân mến:
     </p>
     <p>
@@ -47,10 +45,8 @@ export const inviteFormat = ({ firstname, lastname, types }) => {
       của chúng tôi.
     </p>
     <p>
-      <b>
-        Bắt đầu làm bài đánh giá hoặc xem lại kết quả bài đánh giá Anh/Chị vui
-        lòng click vào liên kết bên dưới.
-      </b>
+      <b>Bắt đầu làm bài đánh giá hoặc xem lại kết quả bài đánh giá Anh/Chị vui
+        lòng click vào liên kết bên dưới.</b>
     </p>
     <ul>
       ${links}

@@ -17,7 +17,9 @@ import { SendOutlined, SettingOutlined } from "@ant-design/icons";
 import ShortUniqueId from "short-unique-id";
 import QRCode from "qrcode";
 import { RealmContext } from "../../context/realmProvider";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.bubble.css";
 import {
   insertAssessment,
   insertAssessments,
@@ -46,6 +48,7 @@ function QuickAddAssessment(props) {
   const [advanced, setAdvanced] = useState(null);
 
   const dispatch = useDispatch();
+
   const handleChange = (changedValues, allValues) => {
     //console.log({ changedValues, allValues });
 
@@ -275,6 +278,11 @@ function QuickAddAssessment(props) {
             {assessmentState ? (
               <div dangerouslySetInnerHTML={{ __html: assessmentState }} />
             ) : (
+              // <ReactQuill
+              //   theme="bubble"
+              //   value={assessmentState}
+              //   onChange={setAssessmentState}
+              // />
               <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
             )}
           </Card>
