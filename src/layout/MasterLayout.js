@@ -12,6 +12,7 @@ import {
   getUser,
   selectUser,
   deleteOneAssessment,
+  updateUser,
 } from "../redux/asessmentsSlice";
 import { objectIdToString } from "../utils";
 
@@ -34,9 +35,8 @@ function MasterLayout(props) {
           .collection("assessments")
           .watch()) {
           const { documentKey, fullDocument } = change;
-          dispatch(getUser({ mongo, user }));
           switch (change.operationType) {
-            case "insert":
+            case "update":
             case "replace": {
               dispatch(
                 updateOneAssessment(
@@ -56,24 +56,43 @@ function MasterLayout(props) {
           console.log(`change: ${objectIdToString(documentKey._id)}`, change);
         }
       };
+
+      const userStream = async () => {
+        for await (const change of mongo
+          .db("a247")
+          .collection("user")
+          .watch()) {
+          const { documentKey, fullDocument } = change;
+          dispatch(getUser({ mongo, user }));
+          switch (change.operationType) {
+            case "update":
+            case "replace": {
+              dispatch(updateUser(objectIdToString(fullDocument)));
+              break;
+            }
+          }
+        }
+      };
       changeStream();
+      userStream();
     }
   }, [user]);
   if (isLoggedIn) {
     return (
-      <Spin spinning={loading} size='large'>
+      <Spin spinning={loading} size="large">
         <Header
           style={{
             background: "#222",
             color: "white",
             padding: "15px 20px 15px 20px",
-          }}>
-          <Row justify='space-between' align='middle'>
+          }}
+        >
+          <Row justify="space-between" align="middle">
             <Col lg={16} md={12} xs={10}>
               <img
                 style={{ width: "100%", maxWidth: "200px" }}
-                src='/images/a247logo.webp'
-                alt=''
+                src="/images/a247logo.webp"
+                alt=""
               />
             </Col>
             <Col lg={8} md={12} xs={14} style={{ textAlign: "right" }}>
@@ -98,22 +117,24 @@ function MasterLayout(props) {
                       {
                         label: (
                           <Button
-                            type='primary'
+                            type="primary"
                             danger
-                            size='small'
+                            size="small"
                             icon={<LogoutOutlined />}
                             onClick={() => {
                               logout().then(() => {
                                 window.location.reload();
                               });
-                            }}>
+                            }}
+                          >
                             Đăng xuất
                           </Button>
                         ),
                         key: "logout",
                       },
                     ],
-                  }}>
+                  }}
+                >
                   <Avatar
                     style={{ backgroundColor: "#87d068", cursor: "pointer" }}
                     icon={<UserOutlined />}
@@ -172,7 +193,8 @@ function MasterLayout(props) {
             textAlign: "center",
             background: "#222",
             color: "white",
-          }}>
+          }}
+        >
           © 2022 WoW Multimedia. version 1.0.2 beta
         </p>
       </Spin>

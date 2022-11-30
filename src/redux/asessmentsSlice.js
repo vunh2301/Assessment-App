@@ -6,7 +6,7 @@ import {
 import { ObjectId, objectIdToString } from "../utils";
 
 const assessmentsAdapter = createEntityAdapter({
-  selectId: entry => entry._id,
+  selectId: (entry) => entry._id,
   sortComparer: (a, b) => b._id.localeCompare(a._id),
 });
 const asessmentsSlice = createSlice({
@@ -17,6 +17,9 @@ const asessmentsSlice = createSlice({
     user: {},
   }),
   reducers: {
+    updateUser: (state, action) => {
+      state.user = action.payload;
+    },
     updateOneAssessment: assessmentsAdapter.updateOne,
     deleteOneAssessment: assessmentsAdapter.removeOne,
   },
@@ -67,7 +70,7 @@ const asessmentsSlice = createSlice({
       });
   },
 });
-export const { deleteOneAssessment, updateOneAssessment } =
+export const { deleteOneAssessment, updateOneAssessment, updateUser } =
   asessmentsSlice.actions;
 
 //FETCH ALL
@@ -201,11 +204,12 @@ export const getUser = createAsyncThunk(
   }
 );
 const assessmentsSelectors = assessmentsAdapter.getSelectors(
-  state => state.assessments
+  (state) => state.assessments
 );
 
-export const selectAssessments = state => assessmentsSelectors.selectAll(state);
-export const selectUser = state => state.assessments.user;
-export const selectTopNewAssessments = state =>
+export const selectAssessments = (state) =>
+  assessmentsSelectors.selectAll(state);
+export const selectUser = (state) => state.assessments.user;
+export const selectTopNewAssessments = (state) =>
   selectAssessments(state).filter((_, i) => i < 5);
 export default asessmentsSlice;
