@@ -16,6 +16,10 @@ const asessmentsSlice = createSlice({
     error: "",
     user: {},
   }),
+  reducers: {
+    updateOneAssessment: assessmentsAdapter.updateOne,
+    deleteOneAssessment: assessmentsAdapter.removeOne,
+  },
   extraReducers(builder) {
     builder
       .addCase(fetchAssessments.fulfilled, (state, action) => {
@@ -63,6 +67,8 @@ const asessmentsSlice = createSlice({
       });
   },
 });
+export const { deleteOneAssessment, updateOneAssessment } =
+  asessmentsSlice.actions;
 
 //FETCH ALL
 export const fetchAssessments = createAsyncThunk(

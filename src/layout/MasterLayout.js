@@ -1,35 +1,25 @@
-import {
-  Avatar,
-  Button,
-  Col,
-  ConfigProvider,
-  DatePicker,
-  Dropdown,
-  Layout,
-  Row,
-  Space,
-  Spin,
-} from "antd";
+import { Avatar, Button, Col, Dropdown, Layout, Row, Space, Spin } from "antd";
 import { Header } from "antd/es/layout/layout";
 import React, { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Outlet, useSearchParams } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { LogoutOutlined, UserOutlined } from "@ant-design/icons";
 import Login from "../components/login/Login";
 import { RealmContext } from "../context/realmProvider";
 import {
+  updateOneAssessment,
   fetchAssessments,
   getUser,
   selectUser,
+  deleteOneAssessment,
 } from "../redux/asessmentsSlice";
-import { result } from "lodash";
+import { objectIdToString } from "../utils";
 
 function MasterLayout(props) {
-  const { logout, isLoggedIn, mongo, user, app } = useContext(RealmContext);
+  const { logout, isLoggedIn, mongo, user } = useContext(RealmContext);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
   const currentUser = useSelector(selectUser);
-  const [searchParams] = useSearchParams();
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -38,6 +28,35 @@ function MasterLayout(props) {
       dispatch(fetchAssessments({ mongo, user })).then(() => {
         setLoading(false);
       });
+      const changeStream = async () => {
+        for await (const change of mongo
+          .db("a247")
+          .collection("assessments")
+          .watch()) {
+          const { documentKey, fullDocument } = change;
+          dispatch(getUser({ mongo, user }));
+          switch (change.operationType) {
+            case "insert":
+            case "replace": {
+              dispatch(
+                updateOneAssessment(
+                  objectIdToString({
+                    id: fullDocument._id,
+                    changes: fullDocument,
+                  })
+                )
+              );
+              break;
+            }
+            case "delete": {
+              dispatch(deleteOneAssessment(objectIdToString(documentKey._id)));
+              break;
+            }
+          }
+          console.log(`change: ${objectIdToString(documentKey._id)}`, change);
+        }
+      };
+      changeStream();
     }
   }, [user]);
   if (isLoggedIn) {
@@ -50,14 +69,14 @@ function MasterLayout(props) {
             padding: "15px 20px 15px 20px",
           }}>
           <Row justify='space-between' align='middle'>
-            <Col span={16}>
+            <Col lg={16} md={12} xs={10}>
               <img
                 style={{ width: "100%", maxWidth: "200px" }}
                 src='/images/a247logo.webp'
                 alt=''
               />
             </Col>
-            <Col span={8} style={{ textAlign: "right" }}>
+            <Col lg={8} md={12} xs={14} style={{ textAlign: "right" }}>
               <Space>
                 <div>
                   <h4 style={{ margin: 0 }}>{currentUser.email}</h4>
@@ -84,7 +103,9 @@ function MasterLayout(props) {
                             size='small'
                             icon={<LogoutOutlined />}
                             onClick={() => {
-                              logout();
+                              logout().then(() => {
+                                window.location.reload();
+                              });
                             }}>
                             Đăng xuất
                           </Button>

@@ -207,56 +207,66 @@ function QuickAddAssessment(props) {
                 </Form.Item>
               </Col>
             </Row>
-            <Form.Item name='language' style={{ display: "none" }}>
-              <Radio.Group>
-                <Radio value='Vietnamese'>Vietnamese</Radio>
-                <Radio value='English' disabled>
-                  English
-                </Radio>
-              </Radio.Group>
-            </Form.Item>
-            <Form.Item
-              name='type'
-              rules={[
-                {
-                  required: true,
-                  message: "Vui chọn bài Đánh giá!",
-                },
-              ]}>
-              <Checkbox.Group>
-                <Row>
-                  <Col span={12}>
-                    <Checkbox value='DISC' style={{ lineHeight: "32px" }}>
-                      DISC
-                    </Checkbox>
-                  </Col>
-                  <Col span={12}>
-                    <Checkbox value='Motivators' style={{ lineHeight: "32px" }}>
-                      Motivators
-                    </Checkbox>
-                  </Col>
-                  <Col span={12}>
-                    <Checkbox
-                      value='Sale IQ Plus'
-                      style={{ lineHeight: "32px" }}>
-                      Sale IQ Plus
-                    </Checkbox>
-                  </Col>
-                  <Col span={12}>
-                    <Checkbox value='EIQ 2' style={{ lineHeight: "32px" }}>
-                      EIQ 2
-                    </Checkbox>
-                  </Col>
-                  <Col span={12}>
-                    <Checkbox
-                      value='Learning Styles'
-                      style={{ lineHeight: "32px" }}>
-                      Learning Styles
-                    </Checkbox>
-                  </Col>
-                </Row>
-              </Checkbox.Group>
-            </Form.Item>
+
+            <Row gutter={20}>
+              <Col span={16}>
+                <Form.Item
+                  name='type'
+                  rules={[
+                    {
+                      required: true,
+                      message: "Vui chọn bài Đánh giá!",
+                    },
+                  ]}>
+                  <Checkbox.Group>
+                    <Row>
+                      <Col span={12}>
+                        <Checkbox value='DISC' style={{ lineHeight: "32px" }}>
+                          DISC
+                        </Checkbox>
+                      </Col>
+                      <Col span={12}>
+                        <Checkbox
+                          value='Motivators'
+                          style={{ lineHeight: "32px" }}>
+                          Motivators
+                        </Checkbox>
+                      </Col>
+                      <Col span={12}>
+                        <Checkbox
+                          value='Sale IQ Plus'
+                          style={{ lineHeight: "32px" }}>
+                          Sale IQ Plus
+                        </Checkbox>
+                      </Col>
+                      <Col span={12}>
+                        <Checkbox value='EIQ 2' style={{ lineHeight: "32px" }}>
+                          EIQ 2
+                        </Checkbox>
+                      </Col>
+                      <Col span={12}>
+                        <Checkbox
+                          value='Learning Styles'
+                          style={{ lineHeight: "32px" }}>
+                          Learning Styles
+                        </Checkbox>
+                      </Col>
+                    </Row>
+                  </Checkbox.Group>
+                </Form.Item>
+              </Col>
+              <Col span={8}>
+                <Form.Item name='language'>
+                  <Radio.Group>
+                    <Radio value='Vietnamese'>Vietnamese</Radio>
+                    <Radio value='English' disabled>
+                      English
+                    </Radio>
+                  </Radio.Group>
+                </Form.Item>
+              </Col>
+            </Row>
+
             <Collapse activeKey={advanced} ghost>
               <Collapse.Panel
                 showArrow={false}
