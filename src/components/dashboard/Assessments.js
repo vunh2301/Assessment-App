@@ -23,15 +23,16 @@ import {
 } from "../../redux/asessmentsSlice";
 import "moment/locale/vi";
 import { RealmContext } from "../../context/realmProvider";
+import { randomHexColor } from "../../utils";
 
 function Assessments(props) {
   const { mongo } = useContext(RealmContext);
   const asessments = useSelector(selectAssessments);
   const dispatch = useDispatch();
-  const handleDelete = (id) => {
+  const handleDelete = id => {
     dispatch(deleteAssessment({ mongo, id }));
   };
-  const statusColor = (status) => {
+  const statusColor = status => {
     switch (status) {
       case "Created":
         return "#999";
@@ -48,8 +49,8 @@ function Assessments(props) {
   return (
     <Card>
       <Table
-        id="body-view"
-        rowKey="_id"
+        id='body-view'
+        rowKey='_id'
         columns={[
           {
             title: "Bài đánh giá",
@@ -93,11 +94,10 @@ function Assessments(props) {
                       {entity.firstname} {entity.lastname}
                     </h4>
                     <span style={{ margin: 0 }}>
-                      <Tooltip title="Đi tới bài đánh giá">
+                      <Tooltip title='Đi tới bài đánh giá'>
                         <a
                           href={`https://link.a247.vn/${entity.short}`}
-                          target="_blank"
-                        >
+                          target='_blank'>
                           {entity.type} <LinkOutlined />
                         </a>
                       </Tooltip>
@@ -111,19 +111,37 @@ function Assessments(props) {
             title: "Email",
             sorter: (a, b) => a.email > b.email,
             dataIndex: "email",
-            render: (email) => (
+            render: email => (
               <span style={{ fontSize: "13px", color: "#5f6368" }}>
                 {email}
               </span>
             ),
           },
+          // {
+          //   title: "Tags",
+          //   dataIndex: "tags",
+          //   render: (_, { tags }) => (
+          //     <>
+          //       {tags
+          //         ? tags.map(tag => {
+          //             let color = randomHexColor();
+          //             return (
+          //               <Tag color={color} key={tag}>
+          //                 {tag.toUpperCase()}
+          //               </Tag>
+          //             );
+          //           })
+          //         : ""}
+          //     </>
+          //   ),
+          // },
           {
             title: "Ngày tạo",
             dataIndex: "created",
             sorter: (a, b) => a.created - b.created,
             align: "center",
             width: "180px",
-            render: (created) => {
+            render: created => {
               return (
                 <h4 style={{ fontSize: "13px", color: "#5f6368", margin: 0 }}>
                   {moment().diff(moment(created), "hours") >= 24
@@ -164,13 +182,13 @@ function Assessments(props) {
               <>
                 {entity.report && entity.report.download ? (
                   <h4>
-                    <a href={entity.report.download} target="_blank">
+                    <a href={entity.report.download} target='_blank'>
                       Tải báo cáo <CloudDownloadOutlined />
                     </a>
                   </h4>
                 ) : (
                   <Progress
-                    type="circle"
+                    type='circle'
                     percent={Math.floor(
                       entity.report && entity.report.current
                         ? entity.report.current
@@ -201,12 +219,11 @@ function Assessments(props) {
                 <Tag color={statusColor(entity.status)}>{entity.status}</Tag>
                 {entity.status === "Created" || entity.status === "Sented" ? (
                   <Popconfirm
-                    title="Bạn muốn xoá?"
-                    onConfirm={() => handleDelete(entity._id)}
-                  >
+                    title='Bạn muốn xoá?'
+                    onConfirm={() => handleDelete(entity._id)}>
                     <Button
-                      size="small"
-                      type="primary"
+                      size='small'
+                      type='primary'
                       danger
                       icon={<DeleteOutlined />}
                     />

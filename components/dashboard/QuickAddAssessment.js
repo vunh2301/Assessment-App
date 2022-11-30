@@ -1,33 +1,26 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Button,
   Card,
   Checkbox,
   Col,
-  Collapse,
   Empty,
   Form,
   Input,
   Radio,
   Row,
-  Segmented,
-  Select,
   Spin,
 } from "antd";
-import { SendOutlined, SettingOutlined } from "@ant-design/icons";
 import ShortUniqueId from "short-unique-id";
 import QRCode from "qrcode";
 import { RealmContext } from "../../context/realmProvider";
 import { useDispatch, useSelector } from "react-redux";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.bubble.css";
 import {
   insertAssessment,
   insertAssessments,
-  selectAssessments,
   updateAssessments,
 } from "../../redux/asessmentsSlice";
-import { inviteFormat, ObjectId, _ } from "../../utils";
+import { inviteFormat, ObjectId } from "../../utils";
 import moment from "moment";
 const generateQR = async text => {
   try {
@@ -44,24 +37,11 @@ const uid = new ShortUniqueId({
 function QuickAddAssessment(props) {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
-  const assessments = useSelector(selectAssessments);
   const [assessmentState, setAssessmentState] = useState();
   const [assessmentType, setAssessmentType] = useState([]);
   const { mongo, user, app } = useContext(RealmContext);
-  const [advanced, setAdvanced] = useState(null);
-  const [tags, settags] = useState([]);
 
   const dispatch = useDispatch();
-  useEffect(() => {
-    var _tags = [];
-    assessments.forEach(a => {
-      if (a.tags) _tags = _.union(_tags, a.tags);
-    });
-    _tags = _tags.map(t => {
-      return { value: t, label: t };
-    });
-    settags(_tags);
-  }, [assessments]);
   const handleChange = (changedValues, allValues) => {
     //console.log({ changedValues, allValues });
 
@@ -79,17 +59,28 @@ function QuickAddAssessment(props) {
   };
   const handleFinish = async values => {
     setLoading(true);
-    values = { ...values, email: values.email.toLowerCase() };
     const entities = [];
     for (const i in assessmentType) {
+      var target = 0;
+      switch (assessmentType[i].type) {
+        case "DISC":
+          target = 30;
+          break;
+        case "Motivators":
+          target = 10;
+          break;
+      }
       entities.push({
         ...values,
+        title: `${values.firstname} ${values.lastname} - ${assessmentType[i].type[i]}`,
         type: assessmentType[i].type,
         owner: user.id,
         short: assessmentType[i].short,
+        language: "Vietnamese",
         status: "Created",
         report: {
           current: 0,
+          target,
         },
         created: new Date(),
         updated: new Date(),
@@ -104,9 +95,7 @@ function QuickAddAssessment(props) {
     await user.functions.sendmail({
       from: "Assessment 2x47 <reports@a247.vn>",
       to: values.email,
-      cc: values.emailCC,
       subject: "Bài đánh giá Assessment 2x47",
-      "o:tag": "app.a247.vn",
       html: assessmentState,
     });
     await dispatch(
@@ -118,14 +107,16 @@ function QuickAddAssessment(props) {
     );
     form.resetFields();
     setAssessmentState(null);
+
     setLoading(false);
   };
   return (
     <Spin spinning={loading}>
       <Row gutter={20}>
-        <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+        <Col span={12}>
           <h3>Thông tin khách hàng:</h3>
           <Form
+            size='large'
             form={form}
             layout='vertical'
             name='quickAddAssessment'
@@ -135,119 +126,80 @@ function QuickAddAssessment(props) {
               email: "",
               type: [],
               language: "Vietnamese",
-              gender: "Anh/Chị",
             }}>
+            <Form.Item
+              name='email'
+              rules={[
+                {
+                  type: "email",
+                  required: true,
+                  message: "Vui lòng nhập địa chỉ email!",
+                },
+              ]}>
+              <Input placeholder='Địa chỉ Email' />
+            </Form.Item>
             <Row gutter={20}>
-              <Col span={16}>
-                <Form.Item
-                  name='email'
-                  rules={[
-                    {
-                      type: "email",
-                      required: true,
-                      message: "Vui lòng nhập địa chỉ email!",
-                    },
-                  ]}>
-                  <Input placeholder='Địa chỉ Email' allowClear />
-                </Form.Item>
-              </Col>
-              <Col span={8}>
-                <Form.Item
-                  name='gender'
-                  rules={[
-                    {
-                      required: true,
-                    },
-                  ]}>
-                  <Select
-                    style={{
-                      width: "100%",
-                    }}
-                    options={[
-                      {
-                        value: "Anh/Chị",
-                        label: "Anh/Chị",
-                      },
-                      {
-                        value: "Anh",
-                        label: "Anh",
-                      },
-                      {
-                        value: "Chị",
-                        label: "Chị",
-                      },
-                    ]}
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={20}>
-              <Col span={16}>
+              <Col span={12}>
                 <Form.Item
                   name='firstname'
                   rules={[
                     {
                       required: true,
-                      message: "Vui lòng nhập Họ và Tên lót!",
                     },
                   ]}>
-                  <Input placeholder='Họ và Tên lót' allowClear />
+                  <Input placeholder='Họ và Tên lót' />
                 </Form.Item>
               </Col>
-              <Col span={8}>
+              <Col span={12}>
                 <Form.Item
                   name='lastname'
                   rules={[
                     {
                       required: true,
-                      message: "Vui lòng nhập Tên!",
                     },
                   ]}>
-                  <Input placeholder='Tên' allowClear />
+                  <Input placeholder='Tên' />
                 </Form.Item>
               </Col>
             </Row>
-            <Form.Item name='language' style={{ display: "none" }}>
-              <Radio.Group>
-                <Radio value='Vietnamese'>Vietnamese</Radio>
-                <Radio value='English' disabled>
-                  English
-                </Radio>
-              </Radio.Group>
-            </Form.Item>
+            {/* <Form.Item name='language'>
+            <Radio.Group>
+              <Radio value='Vietnamese'>Vietnamese</Radio>
+              <Radio value='English'>English</Radio>
+            </Radio.Group>
+          </Form.Item> */}
             <Form.Item
               name='type'
               rules={[
                 {
                   required: true,
-                  message: "Vui chọn bài Đánh giá!",
                 },
               ]}>
               <Checkbox.Group>
                 <Row>
-                  <Col span={12}>
+                  <Col span={8}>
                     <Checkbox value='DISC' style={{ lineHeight: "32px" }}>
                       DISC
                     </Checkbox>
                   </Col>
-                  <Col span={12}>
+                  <Col span={8}>
                     <Checkbox value='Motivators' style={{ lineHeight: "32px" }}>
                       Motivators
                     </Checkbox>
                   </Col>
-                  <Col span={12}>
+                  <Col span={8}>
                     <Checkbox
                       value='Sale IQ Plus'
                       style={{ lineHeight: "32px" }}>
                       Sale IQ Plus
                     </Checkbox>
                   </Col>
-                  <Col span={12}>
+                  <Col span={8}>
                     <Checkbox value='EIQ 2' style={{ lineHeight: "32px" }}>
                       EIQ 2
                     </Checkbox>
                   </Col>
-                  <Col span={12}>
+                  <Col span={16}>
                     <Checkbox
                       value='Learning Styles'
                       style={{ lineHeight: "32px" }}>
@@ -257,66 +209,22 @@ function QuickAddAssessment(props) {
                 </Row>
               </Checkbox.Group>
             </Form.Item>
-            <Collapse activeKey={advanced} ghost>
-              <Collapse.Panel
-                showArrow={false}
-                header={null}
-                key='advanced'
-                forceRender>
-                <Form.Item
-                  name='emailCC'
-                  rules={[
-                    {
-                      type: "email",
-                      message: "Vui lòng nhập địa chỉ email!",
-                    },
-                  ]}>
-                  <Input placeholder='Địa chỉ Email CC' allowClear />
-                </Form.Item>
-                {/* <Form.Item name='tags'>
-                  <Select
-                    allowClear
-                    placeholder='Tags'
-                    mode='tags'
-                    style={{ width: "100%" }}
-                    options={tags}
-                  />
-                </Form.Item> */}
-              </Collapse.Panel>
-            </Collapse>
             <Form.Item>
-              <Button
-                icon={<SettingOutlined />}
-                onClick={() => {
-                  if (advanced === null) {
-                    setAdvanced(["advanced"]);
-                  } else {
-                    setAdvanced(null);
-                  }
-                }}>
-                Mở rộng
-              </Button>
               <Button
                 style={{ float: "right" }}
                 type='primary'
-                htmlType='submit'
-                icon={<SendOutlined />}>
+                htmlType='submit'>
                 Gửi bài đánh giá
               </Button>
             </Form.Item>
           </Form>
         </Col>
-        <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-          <h3>Nội dung email: </h3>
+        <Col span={12}>
+          <h3>Nội dung email:</h3>
           <Card>
             {assessmentState ? (
               <div dangerouslySetInnerHTML={{ __html: assessmentState }} />
             ) : (
-              // <ReactQuill
-              //   theme="bubble"
-              //   value={assessmentState}
-              //   onChange={setAssessmentState}
-              // />
               <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
             )}
           </Card>

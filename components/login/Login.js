@@ -44,7 +44,7 @@ function Login(props) {
   const handleSignIn = async values => {
     if (!isValid) return;
     try {
-      await login("emailPassword", values.email.toLowerCase(), values.password);
+      await login("emailPassword", values.email, values.password);
       toast.success("Login success");
     } catch (error) {
       toast.error("Your account does not exist! Please try again");
@@ -59,11 +59,11 @@ function Login(props) {
           autoComplete='off'>
           <div className='mb-[20px] md:mb-[40px]'>
             <h2 className='text-center md:text-left text-[38px] font-semibold text-[#2E2E2E]'>
-              Welcome back
+              Chào mừng đến Assessments Platform
             </h2>
-            <p className='md:text-left text-center text-[16px] text-[#979797]'>
+            {/* <p className='md:text-left text-center text-[16px] text-[#979797]'>
               Welcome back! Please enter your details.
-            </p>
+            </p> */}
           </div>
           <Field>
             <Label htmlFor='email'>Email</Label>
