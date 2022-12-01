@@ -36,7 +36,7 @@ function MasterLayout(props) {
           const { documentKey, fullDocument } = change;
           dispatch(getUser({ mongo, user }));
           switch (change.operationType) {
-            case "insert":
+            case "update":
             case "replace": {
               dispatch(
                 updateOneAssessment(
