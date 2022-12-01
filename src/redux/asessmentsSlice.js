@@ -3,7 +3,7 @@ import {
   createEntityAdapter,
   createSlice,
 } from "@reduxjs/toolkit";
-import { ObjectId, objectIdToString } from "../utils";
+import { ObjectId, objectIdToString, search } from "../utils";
 
 const assessmentsAdapter = createEntityAdapter({
   selectId: entry => entry._id,
@@ -15,8 +15,15 @@ const asessmentsSlice = createSlice({
     status: "idle",
     error: "",
     user: {},
+    search: "",
   }),
   reducers: {
+    searchAssessments: (state, action) => {
+      state.search = action.payload;
+    },
+    updateUser: (state, action) => {
+      state.user = action.payload;
+    },
     updateOneAssessment: assessmentsAdapter.updateOne,
     deleteOneAssessment: assessmentsAdapter.removeOne,
   },
@@ -67,8 +74,12 @@ const asessmentsSlice = createSlice({
       });
   },
 });
-export const { deleteOneAssessment, updateOneAssessment } =
-  asessmentsSlice.actions;
+export const {
+  searchAssessments,
+  deleteOneAssessment,
+  updateOneAssessment,
+  updateUser,
+} = asessmentsSlice.actions;
 
 //FETCH ALL
 export const fetchAssessments = createAsyncThunk(
@@ -204,7 +215,9 @@ const assessmentsSelectors = assessmentsAdapter.getSelectors(
   state => state.assessments
 );
 
-export const selectAssessments = state => assessmentsSelectors.selectAll(state);
+export const selectSearch = state => state.assessments.search;
+export const selectAssessments = state =>
+  search(assessmentsSelectors.selectAll(state), selectSearch(state));
 export const selectUser = state => state.assessments.user;
 export const selectTopNewAssessments = state =>
   selectAssessments(state).filter((_, i) => i < 5);
