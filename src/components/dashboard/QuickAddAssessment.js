@@ -283,7 +283,7 @@ function QuickAddAssessment(props) {
                   ]}>
                   <Input placeholder='Địa chỉ Email CC' allowClear />
                 </Form.Item>
-                {/* <Form.Item name='tags'>
+                <Form.Item name='tags'>
                   <Select
                     allowClear
                     placeholder='Tags'
@@ -291,7 +291,7 @@ function QuickAddAssessment(props) {
                     style={{ width: "100%" }}
                     options={tags}
                   />
-                </Form.Item> */}
+                </Form.Item>
               </Collapse.Panel>
             </Collapse>
             <Form.Item>

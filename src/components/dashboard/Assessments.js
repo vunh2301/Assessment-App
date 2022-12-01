@@ -136,24 +136,24 @@ function Assessments(props) {
                 </span>
               ),
             },
-            // {
-            //   title: "Tags",
-            //   dataIndex: "tags",
-            //   render: (_, { tags }) => (
-            //     <>
-            //       {tags
-            //         ? tags.map(tag => {
-            //             let color = randomHexColor();
-            //             return (
-            //               <Tag color={color} key={tag}>
-            //                 {tag.toUpperCase()}
-            //               </Tag>
-            //             );
-            //           })
-            //         : ""}
-            //     </>
-            //   ),
-            // },
+            {
+              title: "Tags",
+              dataIndex: "tags",
+              render: (_, { tags }) => (
+                <>
+                  {tags
+                    ? tags.map(tag => {
+                        let color = randomHexColor();
+                        return (
+                          <Tag color={color} key={tag}>
+                            {tag.toUpperCase()}
+                          </Tag>
+                        );
+                      })
+                    : ""}
+                </>
+              ),
+            },
             {
               title: "Ngày tạo",
               dataIndex: "created",
