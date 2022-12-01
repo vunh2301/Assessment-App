@@ -273,26 +273,36 @@ function QuickAddAssessment(props) {
                 header={null}
                 key='advanced'
                 forceRender>
-                <Form.Item
-                  name='emailCC'
-                  rules={[
-                    {
-                      type: "email",
-                      message: "Vui lòng nhập địa chỉ email!",
-                    },
-                  ]}>
-                  <Input placeholder='Địa chỉ Email CC' allowClear />
-                </Form.Item>
-                <Form.Item name='tags'>
-                  <Select
-                    allowClear
-                    placeholder='Tags'
-                    mode='tags'
-                    style={{ width: "100%" }}
-                    options={tags}
-                    maxTagCount='responsive'
-                  />
-                </Form.Item>
+                <Row gutter={20}>
+                  <Col span={12}>
+                    <Form.Item
+                      name='emailCC'
+                      rules={[
+                        {
+                          type: "email",
+                          message: "Vui lòng nhập địa chỉ email!",
+                        },
+                      ]}>
+                      <Input
+                        style={{ width: "100%" }}
+                        placeholder='Địa chỉ Email CC'
+                        allowClear
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item name='tags'>
+                      <Select
+                        allowClear
+                        placeholder='Tags: Nhập và nhấn Enter để tạo tag mới'
+                        mode='tags'
+                        style={{ width: "100%" }}
+                        options={tags}
+                        maxTagCount='responsive'
+                      />
+                    </Form.Item>
+                  </Col>
+                </Row>
               </Collapse.Panel>
             </Collapse>
             <Form.Item>

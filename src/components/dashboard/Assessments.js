@@ -87,102 +87,102 @@ function Assessments(props) {
   };
   return (
     <Card>
-      <div style={{ marginBottom: "20px" }}>
-        <Input.Search
-          style={{
-            width: 200,
-            marginRight: 15,
-          }}
-          defaultValue={search}
-          placeholder='Nhập từ khoá tìm kiếm'
-          onChange={handleSearch}
-          enterButton
-        />
-        <Select
-          allowClear
-          placeholder='Lọc theo Tags'
-          mode='multiple'
-          style={{ width: 200, marginRight: 15 }}
-          onChange={handleFilter}
-          options={tags}
-          maxTagCount='responsive'
-        />
-        <Select
-          allowClear
-          placeholder='Lọc theo Trạng thái'
-          style={{
-            width: 200,
-            marginRight: 15,
-          }}
-          onChange={handleStatus}
-          options={[
-            {
-              value: "Created",
-              label: "Created",
-            },
-            {
-              value: "Sented",
-              label: "Sented",
-            },
-            {
-              value: "Opened",
-              label: "Opened",
-            },
-            {
-              value: "Doing",
-              label: "Doing",
-            },
-            {
-              value: "Completed",
-              label: "Completed",
-            },
-            {
-              value: "Expired",
-              label: "Expired",
-            },
-          ]}
-        />
-        <DatePicker.RangePicker
-          locale={locale}
-          style={{ width: 300, marginRight: 15 }}
-          format='DD MMM YYYY'
-          presets={[
-            {
-              label: "7 Ngày trước",
-              value: [dayjs().add(-7, "d"), dayjs()],
-            },
-            {
-              label: "14 Ngày trước",
-              value: [dayjs().add(-14, "d"), dayjs()],
-            },
-            {
-              label: "30 Ngày trước",
-              value: [dayjs().add(-30, "d"), dayjs()],
-            },
-            {
-              label: "90 Ngày trước",
-              value: [dayjs().add(-90, "d"), dayjs()],
-            },
-            {
-              label: "Tháng này",
-              value: [
-                dayjs(`${dayjs().format("YYYY-MM-")}01`),
-                dayjs(`${dayjs().format("YYYY-MM-")}${dayjs().daysInMonth()}`),
-              ],
-            },
-            {
-              label: "Tháng trước",
-              value: [
-                dayjs(`${dayjs().format("YYYY-MM-")}01`).subtract(1, "month"),
-                dayjs(
-                  `${dayjs().format("YYYY-MM-")}${dayjs().daysInMonth()}`
-                ).subtract(1, "month"),
-              ],
-            },
-          ]}
-          onChange={handleDateRange}
-        />
-      </div>
+      <Input.Search
+        style={{
+          width: 250,
+          marginRight: 15,
+          marginBottom: 20,
+        }}
+        defaultValue={search}
+        placeholder='Nhập từ khoá tìm kiếm'
+        onChange={handleSearch}
+        enterButton
+      />
+      <Select
+        allowClear
+        placeholder='Lọc theo Tags'
+        mode='multiple'
+        style={{ width: 200, marginRight: 15, marginBottom: 20 }}
+        onChange={handleFilter}
+        options={tags}
+        maxTagCount='responsive'
+      />
+      <Select
+        allowClear
+        placeholder='Lọc theo Trạng thái'
+        style={{
+          width: 200,
+          marginRight: 15,
+          marginBottom: 20,
+        }}
+        onChange={handleStatus}
+        options={[
+          {
+            value: "Created",
+            label: "Created",
+          },
+          {
+            value: "Sented",
+            label: "Sented",
+          },
+          {
+            value: "Opened",
+            label: "Opened",
+          },
+          {
+            value: "Doing",
+            label: "Doing",
+          },
+          {
+            value: "Completed",
+            label: "Completed",
+          },
+          {
+            value: "Expired",
+            label: "Expired",
+          },
+        ]}
+      />
+      <DatePicker.RangePicker
+        locale={locale}
+        style={{ width: 300, marginRight: 15, marginBottom: 20 }}
+        format='DD MMM YYYY'
+        presets={[
+          {
+            label: "7 Ngày trước",
+            value: [dayjs().add(-7, "d"), dayjs()],
+          },
+          {
+            label: "14 Ngày trước",
+            value: [dayjs().add(-14, "d"), dayjs()],
+          },
+          {
+            label: "30 Ngày trước",
+            value: [dayjs().add(-30, "d"), dayjs()],
+          },
+          {
+            label: "90 Ngày trước",
+            value: [dayjs().add(-90, "d"), dayjs()],
+          },
+          {
+            label: "Tháng này",
+            value: [
+              dayjs(`${dayjs().format("YYYY-MM-")}01`),
+              dayjs(`${dayjs().format("YYYY-MM-")}${dayjs().daysInMonth()}`),
+            ],
+          },
+          {
+            label: "Tháng trước",
+            value: [
+              dayjs(`${dayjs().format("YYYY-MM-")}01`).subtract(1, "month"),
+              dayjs(
+                `${dayjs().format("YYYY-MM-")}${dayjs().daysInMonth()}`
+              ).subtract(1, "month"),
+            ],
+          },
+        ]}
+        onChange={handleDateRange}
+      />
 
       <Table
         id='body-view'
