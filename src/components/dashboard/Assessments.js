@@ -281,7 +281,7 @@ function Assessments(props) {
                           color='blue'
                           key={tag}
                           onClick={() => handleSelectTag(tag)}>
-                          {tag.toUpperCase()}
+                          {tag}
                         </Tag>
                       );
                     })
