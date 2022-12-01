@@ -5,12 +5,12 @@ import {
   createSlice,
 } from "@reduxjs/toolkit";
 import { objectIdToString } from "../utils";
-import asessmentsSlice from "./asessmentsSlice";
+import assessmentsSlice from "./assessmentsSlice";
 import usersSlice from "./usersSlice";
 
 export const store = configureStore({
   reducer: {
-    assessments: asessmentsSlice.reducer,
+    assessments: assessmentsSlice.reducer,
     users: usersSlice.reducer,
   },
   middleware: getDefaultMiddleware =>

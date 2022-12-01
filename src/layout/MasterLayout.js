@@ -13,7 +13,7 @@ import {
   selectUser,
   deleteOneAssessment,
   updateUser,
-} from "../redux/asessmentsSlice";
+} from "../redux/assessmentsSlice";
 import { objectIdToString } from "../utils";
 
 function MasterLayout(props) {
@@ -79,20 +79,19 @@ function MasterLayout(props) {
   }, [user]);
   if (isLoggedIn) {
     return (
-      <Spin spinning={loading} size="large">
+      <Spin spinning={loading} size='large'>
         <Header
           style={{
             background: "#222",
             color: "white",
             padding: "15px 20px 15px 20px",
-          }}
-        >
-          <Row justify="space-between" align="middle">
+          }}>
+          <Row justify='space-between' align='middle'>
             <Col lg={16} md={12} xs={10}>
               <img
                 style={{ width: "100%", maxWidth: "200px" }}
-                src="/images/a247logo.webp"
-                alt=""
+                src='/images/a247logo.webp'
+                alt=''
               />
             </Col>
             <Col lg={8} md={12} xs={14} style={{ textAlign: "right" }}>
@@ -117,24 +116,22 @@ function MasterLayout(props) {
                       {
                         label: (
                           <Button
-                            type="primary"
+                            type='primary'
                             danger
-                            size="small"
+                            size='small'
                             icon={<LogoutOutlined />}
                             onClick={() => {
                               logout().then(() => {
                                 window.location.reload();
                               });
-                            }}
-                          >
+                            }}>
                             Đăng xuất
                           </Button>
                         ),
                         key: "logout",
                       },
                     ],
-                  }}
-                >
+                  }}>
                   <Avatar
                     style={{ backgroundColor: "#87d068", cursor: "pointer" }}
                     icon={<UserOutlined />}
@@ -193,8 +190,7 @@ function MasterLayout(props) {
             textAlign: "center",
             background: "#222",
             color: "white",
-          }}
-        >
+          }}>
           © 2022 WoW Multimedia. version 1.0.2 beta
         </p>
       </Spin>

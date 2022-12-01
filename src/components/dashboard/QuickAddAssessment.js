@@ -26,7 +26,7 @@ import {
   insertAssessments,
   selectAssessments,
   updateAssessments,
-} from "../../redux/asessmentsSlice";
+} from "../../redux/assessmentsSlice";
 import { inviteFormat, ObjectId, _ } from "../../utils";
 import moment from "moment";
 const generateQR = async text => {
@@ -290,6 +290,7 @@ function QuickAddAssessment(props) {
                     mode='tags'
                     style={{ width: "100%" }}
                     options={tags}
+                    maxTagCount='responsive'
                   />
                 </Form.Item>
               </Collapse.Panel>

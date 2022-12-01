@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import {
   selectAssessments,
   selectTopNewAssessments,
-} from "../../redux/asessmentsSlice";
+} from "../../redux/assessmentsSlice";
 import { formatCountdown } from "antd/es/statistic/utils";
 
 function TopNewAssessments(props) {

@@ -1,6 +1,9 @@
 import lodash from "lodash";
 import deepdash from "deepdash";
 import * as Realm from "realm-web";
+import dayjs from "dayjs";
+var isBetween = require("dayjs/plugin/isBetween");
+dayjs.extend(isBetween);
 export const {
   BSON: { ObjectId },
 } = Realm;
@@ -105,13 +108,38 @@ function toSlug(str) {
   // return
   return str;
 }
-export const search = (items, text) => {
+export const search = (items, text, filter, dateRange, status) => {
   text = text.split(" ");
   return items.filter(item => {
-    return text.every(el => {
-      return toSlug(`${item.firstname} ${item.lastname} ${item.email}`)
-        .toLowerCase()
-        .includes(toSlug(el).toLowerCase());
-    });
+    let hasTag = false;
+    let isRange = _.isEmpty(dateRange)
+      ? true
+      : dayjs(item.created).isBetween(dateRange[0], dateRange[1])
+      ? true
+      : false;
+    console.log(status);
+    let isStatus = !status ? true : status === item.status ? true : false;
+
+    if (filter && filter.length > 0) {
+      for (let i = 0; i < filter.length; i++) {
+        if (item.tags && item.tags.includes(filter[i])) {
+          hasTag = true;
+          console.log(item.tags);
+          break;
+        }
+      }
+    } else {
+      hasTag = true;
+    }
+    return (
+      isStatus &&
+      isRange &&
+      hasTag &&
+      text.every(el => {
+        return toSlug(`${item.firstname} ${item.lastname} ${item.email}`)
+          .toLowerCase()
+          .includes(toSlug(el).toLowerCase());
+      })
+    );
   });
 };

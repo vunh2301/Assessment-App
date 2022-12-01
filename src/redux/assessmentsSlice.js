@@ -9,17 +9,29 @@ const assessmentsAdapter = createEntityAdapter({
   selectId: entry => entry._id,
   sortComparer: (a, b) => b._id.localeCompare(a._id),
 });
-const asessmentsSlice = createSlice({
+const assessmentsSlice = createSlice({
   name: "assessments",
   initialState: assessmentsAdapter.getInitialState({
     status: "idle",
     error: "",
     user: {},
     search: "",
+    filter: [],
+    dateRange: [],
+    statusfilter: null,
   }),
   reducers: {
     searchAssessments: (state, action) => {
       state.search = action.payload;
+    },
+    filterAssessments: (state, action) => {
+      state.filter = action.payload;
+    },
+    dateRangeAssessments: (state, action) => {
+      state.dateRange = action.payload;
+    },
+    statusAssessments: (state, action) => {
+      state.statusfilter = action.payload;
     },
     updateUser: (state, action) => {
       state.user = action.payload;
@@ -75,11 +87,14 @@ const asessmentsSlice = createSlice({
   },
 });
 export const {
+  dateRangeAssessments,
+  filterAssessments,
   searchAssessments,
+  statusAssessments,
   deleteOneAssessment,
   updateOneAssessment,
   updateUser,
-} = asessmentsSlice.actions;
+} = assessmentsSlice.actions;
 
 //FETCH ALL
 export const fetchAssessments = createAsyncThunk(
@@ -216,9 +231,19 @@ const assessmentsSelectors = assessmentsAdapter.getSelectors(
 );
 
 export const selectSearch = state => state.assessments.search;
-export const selectAssessments = state =>
-  search(assessmentsSelectors.selectAll(state), selectSearch(state));
+export const selectFilter = state => state.assessments.filter;
+export const selectDateRange = state => state.assessments.dateRange;
+export const selectStatus = state => state.assessments.statusfilter;
+export const selectAssessments = state => assessmentsSelectors.selectAll(state);
+export const selectFilterAssessments = state =>
+  search(
+    assessmentsSelectors.selectAll(state),
+    selectSearch(state),
+    selectFilter(state),
+    selectDateRange(state),
+    selectStatus(state)
+  );
 export const selectUser = state => state.assessments.user;
 export const selectTopNewAssessments = state =>
   selectAssessments(state).filter((_, i) => i < 5);
-export default asessmentsSlice;
+export default assessmentsSlice;
