@@ -114,7 +114,7 @@ export const search = (items, text, filter, dateRange, status) => {
     let hasTag = false;
     let isRange = _.isEmpty(dateRange)
       ? true
-      : dayjs(item.created).isBetween(dateRange[0], dateRange[1])
+      : dayjs(item.created).isBetween(dateRange[0], dateRange[1].add(1, "d"))
       ? true
       : false;
     let isStatus = !status ? true : status === item.status ? true : false;
