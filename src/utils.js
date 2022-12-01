@@ -123,7 +123,6 @@ export const search = (items, text, filter, dateRange, status) => {
       for (let i = 0; i < filter.length; i++) {
         if (item.tags && item.tags.includes(filter[i])) {
           hasTag = true;
-          console.log(item.tags);
           break;
         }
       }

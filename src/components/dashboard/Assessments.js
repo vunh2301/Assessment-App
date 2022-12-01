@@ -27,8 +27,10 @@ import {
   filterAssessments,
   searchAssessments,
   selectAssessments,
+  selectFilter,
   selectFilterAssessments,
   selectSearch,
+  selectStatus,
   statusAssessments,
 } from "../../redux/assessmentsSlice";
 import "moment/locale/vi";
@@ -44,6 +46,8 @@ function Assessments(props) {
   const assessments = useSelector(selectAssessments);
   const computeAssessments = useSelector(selectFilterAssessments);
   const search = useSelector(selectSearch);
+  const selectTag = useSelector(selectFilter);
+  const filStatus = useSelector(selectStatus);
   const [tags, settags] = useState([]);
   const dispatch = useDispatch();
   useEffect(() => {
@@ -85,6 +89,12 @@ function Assessments(props) {
   const handleStatus = value => {
     dispatch(statusAssessments(value));
   };
+  const handleSelectTag = tag => {
+    dispatch(filterAssessments([...selectTag, tag]));
+  };
+  const handleSelectStatus = value => {
+    dispatch(statusAssessments(value));
+  };
   return (
     <Card>
       <Input.Search
@@ -102,6 +112,7 @@ function Assessments(props) {
         allowClear
         placeholder='Lọc theo Tags'
         mode='multiple'
+        value={selectTag}
         style={{ width: 200, marginRight: 15, marginBottom: 20 }}
         onChange={handleFilter}
         options={tags}
@@ -109,6 +120,7 @@ function Assessments(props) {
       />
       <Select
         allowClear
+        value={filStatus}
         placeholder='Lọc theo Trạng thái'
         style={{
           width: 200,
@@ -264,7 +276,11 @@ function Assessments(props) {
                   ? tags.map(tag => {
                       let color = randomHexColor();
                       return (
-                        <Tag color={color} key={tag}>
+                        <Tag
+                          style={{ cursor: "pointer" }}
+                          color='blue'
+                          key={tag}
+                          onClick={() => handleSelectTag(tag)}>
                           {tag.toUpperCase()}
                         </Tag>
                       );
@@ -354,7 +370,12 @@ function Assessments(props) {
             dataIndex: "status",
             render: (_, entity) => (
               <>
-                <Tag color={statusColor(entity.status)}>{entity.status}</Tag>
+                <Tag
+                  style={{ cursor: "pointer" }}
+                  onClick={() => handleSelectStatus(entity.status)}
+                  color={statusColor(entity.status)}>
+                  {entity.status}
+                </Tag>
                 {entity.status === "Created" || entity.status === "Sented" ? (
                   <Popconfirm
                     title='Bạn muốn xoá?'

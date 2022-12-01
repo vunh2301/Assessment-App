@@ -53,7 +53,7 @@ function MasterLayout(props) {
               break;
             }
           }
-          console.log(`change: ${objectIdToString(documentKey._id)}`, change);
+          //console.log(`change: ${objectIdToString(documentKey._id)}`, change);
         }
       };
 
