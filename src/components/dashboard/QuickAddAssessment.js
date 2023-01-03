@@ -102,10 +102,10 @@ function QuickAddAssessment(props) {
 
     //console.log("assessmentState", assessmentState);
     await user.functions.sendmail({
-      from: "Assessment 24x7 <reports@a247.vn>",
+      from: "Assessments 24x7 <reports@a247.vn>",
       to: values.email,
       cc: values.emailCC,
-      subject: "Bài đánh giá Assessment 24x7",
+      subject: "Bài đánh giá Assessments 24x7",
       "o:tag": "app.a247.vn",
       html: assessmentState,
     });
