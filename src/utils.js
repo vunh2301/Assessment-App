@@ -9,8 +9,8 @@ export const {
 } = Realm;
 export const _ = deepdash(lodash);
 
-export const objectIdToString = (obj) => {
-  return _.mapValuesDeep(obj, (v) => {
+export const objectIdToString = obj => {
+  return _.mapValuesDeep(obj, v => {
     if (v?._bsontype === "ObjectID") {
       v = v.toString();
     }
@@ -18,7 +18,7 @@ export const objectIdToString = (obj) => {
   });
 };
 
-export const removeEmptyObject = (obj) =>
+export const removeEmptyObject = obj =>
   _.filterDeep(obj, (value, key, parent) => {
     var func = _.overSome([_.isNil, _.isNaN]);
     return !func(value);
@@ -26,11 +26,10 @@ export const removeEmptyObject = (obj) =>
 export const inviteFormat = ({ firstname, lastname, types, gender, user }) => {
   var links = "";
   var userEmail = user.customData.email;
-  console.log(userEmail);
   if (!firstname || !lastname || !types || types.length <= 0) {
     return "";
   }
-  types.forEach((type) => {
+  types.forEach(type => {
     links += `
       <li>
         <b>${type.type}: </b>
@@ -122,7 +121,7 @@ export const inviteFormat = ({ firstname, lastname, types, gender, user }) => {
   `;
 };
 
-export const randomInteger = (max) => {
+export const randomInteger = max => {
   return Math.floor(Math.random() * (max + 1));
 };
 
@@ -169,9 +168,9 @@ function toSlug(str) {
   // return
   return str;
 }
-export const search = (items, text, filter, dateRange, status) => {
+export const search = (items, text, filter, dateRange, status, type) => {
   text = text.split(" ");
-  return items.filter((item) => {
+  return items.filter(item => {
     let hasTag = false;
     let isRange = _.isEmpty(dateRange)
       ? true
@@ -179,6 +178,7 @@ export const search = (items, text, filter, dateRange, status) => {
       ? true
       : false;
     let isStatus = !status ? true : status === item.status ? true : false;
+    let isType = !type ? true : type === item.type ? true : false;
 
     if (filter && filter.length > 0) {
       for (let i = 0; i < filter.length; i++) {
@@ -191,14 +191,20 @@ export const search = (items, text, filter, dateRange, status) => {
       hasTag = true;
     }
     return (
+      isType &&
       isStatus &&
       isRange &&
       hasTag &&
-      text.every((el) => {
+      text.every(el => {
         return toSlug(`${item.firstname} ${item.lastname} ${item.email}`)
           .toLowerCase()
           .includes(toSlug(el).toLowerCase());
       })
     );
   });
+};
+export const validateEmail = email => {
+  return email.match(
+    /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+  );
 };
