@@ -118,6 +118,9 @@ export const inviteFormat = ({ firstname, lastname, types, gender, user }) => {
     <ul>
       ${links}
     </ul>
+    <strong style="color: red;">
+    Lưu ý: Bài đánh giá có giá trị trong vòng 30 ngày
+    </strong>
   `;
 };
 
