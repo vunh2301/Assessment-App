@@ -9,8 +9,8 @@ export const {
 } = Realm;
 export const _ = deepdash(lodash);
 
-export const objectIdToString = obj => {
-  return _.mapValuesDeep(obj, v => {
+export const objectIdToString = (obj) => {
+  return _.mapValuesDeep(obj, (v) => {
     if (v?._bsontype === "ObjectID") {
       v = v.toString();
     }
@@ -18,18 +18,27 @@ export const objectIdToString = obj => {
   });
 };
 
-export const removeEmptyObject = obj =>
+export const removeEmptyObject = (obj) =>
   _.filterDeep(obj, (value, key, parent) => {
     var func = _.overSome([_.isNil, _.isNaN]);
     return !func(value);
   });
 export const inviteFormat = ({ firstname, lastname, types, gender, user }) => {
   var links = "";
+  let helpDisc =
+    (types || []).filter((item) => item.type === "DISC").length > 0
+      ? `<a href="https://youtu.be/IwPTs9bqItA" target="_blank">Click here</a>`
+      : "";
+  let helpMot =
+    (types || []).filter((item) => item.type === "Motivators").length > 0
+      ? `<a href="https://youtu.be/id7PIFXFbzE" target="_blank">Click here</a>`
+      : "";
+  console.log(types);
   var userEmail = user.customData.email;
   if (!firstname || !lastname || !types || types.length <= 0) {
     return "";
   }
-  types.forEach(type => {
+  types.forEach((type) => {
     links += `
       <li>
         <b>${type.type}: </b>
@@ -39,10 +48,7 @@ export const inviteFormat = ({ firstname, lastname, types, gender, user }) => {
       </li>
       `;
   });
-  if (
-    userEmail == "ethannguyen@actioncoachcbd.com" ||
-    userEmail == "theo@a247.vn"
-  ) {
+  if (userEmail === "theo@a247.vn") {
     return `
     <p>
       <b>${gender ? gender : "Anh/Chị"} ${firstname} ${lastname}</b>
@@ -118,13 +124,27 @@ export const inviteFormat = ({ firstname, lastname, types, gender, user }) => {
     <ul>
       ${links}
     </ul>
-    <strong style="color: red;">
+    <p><strong style="color: red;">
     Lưu ý: Bài đánh giá có giá trị trong vòng 30 ngày
-    </strong>
+    </strong></p>
+    ${
+      helpDisc
+        ? `<p>
+      <strong>Hướng dẫn làm bài đánh giá DISC:</strong> ${helpDisc}
+      </p>`
+        : ""
+    }
+    ${
+      helpMot
+        ? `<p>
+      <strong>Hướng dẫn làm bài đánh giá MOTIVATORS:</strong> ${helpMot}
+      </p>`
+        : ""
+    }
   `;
 };
 
-export const randomInteger = max => {
+export const randomInteger = (max) => {
   return Math.floor(Math.random() * (max + 1));
 };
 
@@ -173,7 +193,7 @@ function toSlug(str) {
 }
 export const search = (items, text, filter, dateRange, status, type) => {
   text = text.split(" ");
-  return items.filter(item => {
+  return items.filter((item) => {
     let hasTag = false;
     let isRange = _.isEmpty(dateRange)
       ? true
@@ -198,7 +218,7 @@ export const search = (items, text, filter, dateRange, status, type) => {
       isStatus &&
       isRange &&
       hasTag &&
-      text.every(el => {
+      text.every((el) => {
         return toSlug(`${item.firstname} ${item.lastname} ${item.email}`)
           .toLowerCase()
           .includes(toSlug(el).toLowerCase());
@@ -206,7 +226,7 @@ export const search = (items, text, filter, dateRange, status, type) => {
     );
   });
 };
-export const validateEmail = email => {
+export const validateEmail = (email) => {
   return email.match(
     /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
   );
